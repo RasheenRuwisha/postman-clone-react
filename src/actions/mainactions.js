@@ -54,10 +54,24 @@ export const loadJavaClass = (json) => (dispatch) => {
 
 
 
- 
-    axios
-        .post(`https://www.jsonschema2pojo.org/generator/preview`, bodyFormData, config)
-        .then(res => {
+    axios.request({
+        method: 'POST',
+        url: `https://www.jsonschema2pojo.org/generator/preview`,
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Accept': '*/*',
+            'Connection': 'keep-alive',
+        },
+        data: {
+            schema: JSON.stringify(json),
+            classname: "TestClass",
+            targetpackage: "com.test.test",
+            sourcetype:"json",
+            annotationstyle:"jackson2"
+        },
+      
+      }).then(res => {
             console.log(res.data);
             // dispatch request to update redux state with the logged in user details
             dispatch({type: GET_JAVA_RESULT, payload: res.data});
