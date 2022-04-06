@@ -34,13 +34,13 @@ export const loadJavaClass = (json) => (dispatch) => {
         }
     }
 
-    const body = JSON.stringify({
+    const body = {
         schema: JSON.stringify(json),
         classname: "TestClass",
         targetpackage: "com.test.test",
         sourcetype:"json",
         annotationstyle:"jackson2"
-    })
+    }
 
     axios
         .post(`https://www.jsonschema2pojo.org/generator/preview`, body, config)
