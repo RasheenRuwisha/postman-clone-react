@@ -1,25 +1,42 @@
-import logo from './logo.svg';
 import './App.css';
+import React, {Component, Fragment} from 'react';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import {BrowserRouter as Router, Route} from 'react-router-dom';
+import Home from './components/Home/Home';
+import Card from '@mui/material/Card';
+import { connect } from 'react-redux';
+import PropType from 'prop-types'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+
+
+class App extends Component{
+
+  state = {
+    right: false,
+    drawerState: 'cart',
+    error: null,
+    deliveryMethod: 'Pickup'
 }
 
-export default App;
+
+render(){
+  return (
+    <Router>
+      <div>
+        <Route exact path="/ll" component={Home}/>
+        </div>
+    </Router>
+  );
+}
+}
+
+App.propTypes = {
+  api: PropType.object.isRequired
+}
+
+const mapStateToProps = state => ({
+  api: state.api, 
+});
+
+export default connect(mapStateToProps)(App);
