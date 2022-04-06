@@ -43,7 +43,7 @@ export const loadJavaClass = (json) => (dispatch) => {
 
 
     var bodyFormData = new FormData();
-    bodyFormData.append('schema', body);
+    bodyFormData.append('schema', JSON.stringify(body));
     bodyFormData.append('classname', 'TestClass');
     bodyFormData.append('targetpackage', 'com.test.test');
     bodyFormData.append('sourcetype', 'json');
