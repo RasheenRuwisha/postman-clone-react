@@ -52,7 +52,7 @@ export const loadJavaClass = (json) => (dispatch) => {
     }
 
     axios
-        .post(`https://www.jsonschema2pojo.org/generator/preview`, body, config)
+        .post(`https://www.jsonschema2pojo.org/generator/preview`, bodyFormData, config)
         .then(res => {
             console.log(res.data);
             // dispatch request to update redux state with the logged in user details
