@@ -34,16 +34,16 @@ export const loadJavaClass = (json) => (dispatch) => {
         }
     }
 
-    const body = {
+    const body = JSON.stringify({
         schema: JSON.stringify(json),
         classname: "TestClass",
         targetpackage: "com.test.test",
         sourcetype:"json",
         annotationstyle:"jackson2"
-    }
+    })
 
     axios
-        .post(`https://www.jsonschema2pojo.org/generator/preview`, JSON.stringify(body), config)
+        .post(`https://www.jsonschema2pojo.org/generator/preview`, body, config)
         .then(res => {
             console.log(res.data);
             // dispatch request to update redux state with the logged in user details
