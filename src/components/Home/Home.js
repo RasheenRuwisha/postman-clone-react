@@ -18,9 +18,11 @@ class Home extends Component {
         api: PropType.object.isRequired,
     }
 
-    componentDidMount() {
-        this.props.loadAPICALL("https://www.thecocktaildb.com/api/json/v1/1/search.php?s=margarita")
-    }
+    onChange = e => {
+        this.props.loadAPICALL(e.target.value)
+      };
+      
+   
 
 
     render() {
@@ -32,7 +34,6 @@ class Home extends Component {
             textAlign: "left"
         }}>
 
-<ReactJson src={this.props.api} />
 
 
             <CardContent>
@@ -43,6 +44,13 @@ class Home extends Component {
           size="small"
           onChange={this.onChange}
         />
+
+<ReactJson theme="monokai" src={this.props.api} />
+
+{
+       this.props.api == undefined ? <div>{this.props.api}</div> : <div>{JSON.stringify(this.props.api)}</div>
+}
+
             </CardContent>
         </Card>
         )

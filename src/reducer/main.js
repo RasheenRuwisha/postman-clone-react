@@ -1,8 +1,9 @@
-import { GET_API_RESULT } from "../actions/types";
+import { GET_API_RESULT, GET_JAVA_RESULT } from "../actions/types";
 
 
 const initialState = {
-    api: null,
+    api: {"apo": "apo"},
+    java: {"java": "java"}
 }
 
 
@@ -13,6 +14,11 @@ export default function (state = initialState, action) {
                     ...state,
                     api:action.payload,
                 };
+                case GET_JAVA_RESULT:
+                    return {
+                        ...state,
+                        java:action.payload,
+                    };
         default:
             return state;
 
