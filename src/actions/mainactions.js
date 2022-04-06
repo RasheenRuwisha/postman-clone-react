@@ -30,7 +30,10 @@ export const loadJavaClass = (json) => (dispatch) => {
 
     const config = {
         headers: {
-            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Accept': '*/*',
+            'Connection': 'keep-alive',
         }
     }
 
