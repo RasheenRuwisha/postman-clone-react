@@ -34,8 +34,16 @@ export const loadJavaClass = (json) => (dispatch) => {
         }
     }
 
+    const body = {
+        classname: "TestClass",
+        targetpackage: "com.test.test",
+        sourcetype:"json",
+        annotationstyle:"jackson2"
+    }
+
+
     var bodyFormData = new FormData();
-    bodyFormData.append('schema', JSON.parse(json));
+    bodyFormData.append('schema', body);
     bodyFormData.append('classname', 'TestClass');
     bodyFormData.append('targetpackage', 'com.test.test');
     bodyFormData.append('sourcetype', 'json');
@@ -43,14 +51,7 @@ export const loadJavaClass = (json) => (dispatch) => {
 
 
 
-    const body = {
-        schema: JSON.stringify(json),
-        classname: "TestClass",
-        targetpackage: "com.test.test",
-        sourcetype:"json",
-        annotationstyle:"jackson2"
-    }
-
+ 
     axios
         .post(`https://www.jsonschema2pojo.org/generator/preview`, bodyFormData, config)
         .then(res => {
