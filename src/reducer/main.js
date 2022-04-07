@@ -3,7 +3,7 @@ import { GET_API_RESULT, GET_JAVA_RESULT } from "../actions/types";
 
 const initialState = {
     api: {"apo": "apo"},
-    java: {"java": "java"}
+    java: "ss"
 }
 
 

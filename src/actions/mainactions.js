@@ -3,18 +3,21 @@ import { GET_API_RESULT, GET_API_RESULT_FAIL, GET_JAVA_RESULT, GET_JAVA_RESULT_F
 
 
 
-export const loadAPICALL = (url) => (dispatch) => {
+export const loadAPICALL = (url,body,method,content) => (dispatch) => {
 
-    const config = {
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    }
+    
+    var config = {
+        method: method,
+        url: url,
+        headers: { 
+          'Content-Type': content
+        },
+        data : body
+      };
 
-    axios
-        .get(`${url}`, config)
-        .then(res => {
-            console.log(res.data);
+      console.log(config);
+
+    axios(config).then(res => {
             // dispatch request to update redux state with the logged in user details
             dispatch({type: GET_API_RESULT, payload: res.data});
             dispatch(loadJavaClass(res.data));
@@ -28,56 +31,33 @@ export const loadAPICALL = (url) => (dispatch) => {
 
 export const loadJavaClass = (json) => (dispatch) => {
 
-    const config = {
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-            'Accept-Encoding': 'gzip, deflate, br',
-            'Accept': '*/*',
-            'Connection': 'keep-alive',
-        }
-    }
+    var qs = require('qs');
+var data = qs.stringify({
+  'schema': JSON.stringify(json),
+  'classname': 'TestClass',
+  'targetpackage': 'com.test.test',
+  'sourcetype': 'json',
+  'annotationstyle': 'jackson2' 
+});
+var config = {
+  method: 'post',
+  url: 'https://www.jsonschema2pojo.org/generator/preview',
+  headers: { 
+    'Content-Type': 'application/x-www-form-urlencoded'
+  },
+  data : data
+};
 
-    const body = {
-        classname: "TestClass",
-        targetpackage: "com.test.test",
-        sourcetype:"json",
-        annotationstyle:"jackson2"
-    }
+axios(config)
+.then(function (res) {
+  console.log(JSON.stringify(res.data));
+  dispatch({type: GET_JAVA_RESULT, payload: res.data});
 
+})
+.catch(function (error) {
+  console.log(error);
+  dispatch({type: GET_JAVA_RESULT_FAIL})
 
-    var bodyFormData = new FormData();
-    bodyFormData.append('schema', JSON.stringify(json));
-    bodyFormData.append('classname', 'TestClass');
-    bodyFormData.append('targetpackage', 'com.test.test');
-    bodyFormData.append('sourcetype', 'json');
-    bodyFormData.append('annotationstyle', 'jackson2');
+});
 
-
-
-    axios.request({
-        method: 'POST',
-        url: `https://www.jsonschema2pojo.org/generator/preview`,
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-            'Accept-Encoding': 'gzip, deflate, br',
-            'Accept': '*/*',
-            'Connection': 'keep-alive',
-        },
-        data: {
-            schema: JSON.stringify(json),
-            classname: "TestClass",
-            targetpackage: "com.test.test",
-            sourcetype:"json",
-            annotationstyle:"jackson2"
-        },
-      
-      }).then(res => {
-            console.log(res.data);
-            // dispatch request to update redux state with the logged in user details
-            dispatch({type: GET_JAVA_RESULT, payload: res.data});
-        })
-        .catch(err => {
-            // dispatch auth error if any error occurs
-            dispatch({type: GET_JAVA_RESULT_FAIL})
-        })
 }

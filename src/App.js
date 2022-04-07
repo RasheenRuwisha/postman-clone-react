@@ -23,7 +23,7 @@ class App extends Component{
 render(){
   return (
     <Router>
-      <div>
+      <div style={{overflow:'hidden'}}>
         <Route exact path="/ll" component={Home}/>
         </div>
     </Router>
@@ -32,11 +32,13 @@ render(){
 }
 
 App.propTypes = {
-  api: PropType.object.isRequired
+  api: PropType.object.isRequired,
+  java: PropType.string.isRequired
 }
 
 const mapStateToProps = state => ({
   api: state.api, 
+  java: state.java,
 });
 
 export default connect(mapStateToProps)(App);
