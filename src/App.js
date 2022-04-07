@@ -24,7 +24,7 @@ render(){
   return (
     <Router>
       <div style={{overflow:'hidden'}}>
-        <Route exact path="/ll" component={Home}/>
+        <Route exact path="/" component={Home}/>
         </div>
     </Router>
   );
