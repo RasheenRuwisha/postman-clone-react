@@ -25,9 +25,11 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import './Home.css';
 import { TextareaAutosize } from "@mui/material";
-
+import { setAxiosCode, setJavaOkHTTP, setXHR, setRestSharp } from "../../helper/CodeHelper";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+import './Home.css';
 
 const columns = [
     { id: 'Key', label: 'Key', minWidth: 170 },
@@ -72,6 +74,7 @@ class Home extends Component {
     method: "GET",
     tab: 0,
     mainTab: 0,
+    codeTab:0,
     url:'',
     rawData:'',
     mutual:[
@@ -136,7 +139,10 @@ class Home extends Component {
       ],
       page:0,
       rowsPerPage:10,
-      code:'ss'
+      axiosCode:'ss',
+      httpCode:'ss',
+      charpCode:'ss',
+      xhrCode:'ss',
 
   };
 
@@ -166,6 +172,11 @@ class Home extends Component {
   maintabChange = (e, value) => {
     console.log(e.target.value);
     this.setState({ mainTab: value });
+  };
+
+  codetabChange = (e, value) => {
+    console.log(e.target.value);
+    this.setState({ codeTab: value });
   };
 
   submitRequest = () => {
@@ -214,31 +225,25 @@ class Home extends Component {
 
    
     console.log(body);
-    this.setCode(url,body,this.state.method,contentType)
+    this.setState({code:setAxiosCode(url,body,this.state.method,contentType), 
+                    httpCode:setJavaOkHTTP(url,body,this.state.method,contentType),
+                    charpCode:setRestSharp(url,body,this.state.method,contentType),
+                    xhrCode:setXHR(url,body,this.state.method,contentType)})
+
+var code = setAxiosCode(url,body,this.state.method,contentType)
+var httpCode = setJavaOkHTTP(url,body,this.state.method,contentType)
+var charpCode = setRestSharp(url,body,this.state.method,contentType)
+var xhrCode = setXHR(url,body,this.state.method,contentType)
+
+
+this.setState({code:code.code.props.children, 
+  httpCode:httpCode.code.props.children,
+  charpCode:charpCode.code.props.children,
+  xhrCode:xhrCode.code.props.children})
     this.props.loadAPICALL(url,body,this.state.method,contentType);
 };
 
-setCode(url,data,contentType,method){
-    var call = `var config = {
-        method: ${method},
-        url: ${url},
-        headers: { 
-          'Content-Type': ${contentType}
-        },
-        data : ${data}
-      };
 
-      console.log(config);
-
-    axios(config).then(res => {
-            console.log(res.data);
-        })
-        .catch(err => {
-            console.log(err)
-        })`
-
-      this.setState({code:<div>{call}</div>});
-}
 
 
 
@@ -267,8 +272,9 @@ setCode(url,data,contentType,method){
     this.setState({bodyRows:rows});
 }
 
+
+
   render() {
-    console.log();
     return (
       <div>
         <Grid container spacing={2}>
@@ -455,7 +461,7 @@ setCode(url,data,contentType,method){
           id="filled-multiline-static"
           fullWidth
           multiline
-          rows={30} onChange={this.changeRawData} value={this.state.rawData}
+          rows={20} onChange={this.changeRawData} value={this.state.rawData}
           variant="filled"
         />
                 </TabPanel>
@@ -476,13 +482,66 @@ setCode(url,data,contentType,method){
               </Tabs>
             </Box>
             <TabPanel value={this.state.tab} index={0}>
-              <ReactJson theme="monokai" src={this.props.api} />
+              <ReactJson theme="twilight" src={this.props.api} />
+
+              
             </TabPanel>
             <TabPanel value={this.state.tab} index={1}>
-              {<div className="display-linebreak">{this.props.java}</div>}
+            <SyntaxHighlighter language="javascript" style={atomDark}>
+            {this.props.java}
+
+    </SyntaxHighlighter>
             </TabPanel>
             <TabPanel value={this.state.tab} index={2}>
-              {<div className="display-linebreak">{this.state.code}</div>}
+
+
+
+            <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+              <Tabs
+                value={this.state.codeTab}
+                onChange={this.codetabChange}
+                aria-label="basic tabs example"
+              >
+                <Tab label="Java" {...a11yProps(0)} />
+                <Tab label="C Sharp" {...a11yProps(1)} />
+                <Tab label="XHR" {...a11yProps(2)} />
+                <Tab label="Axios" {...a11yProps(3)} />
+              </Tabs>
+            </Box>
+            <TabPanel value={this.state.codeTab} index={0}>
+            <SyntaxHighlighter language="java" style={atomDark}>
+            {this.state.httpCode}
+
+    </SyntaxHighlighter>
+            </TabPanel>
+            <TabPanel value={this.state.codeTab} index={1}>
+            <SyntaxHighlighter language="csharp" style={atomDark}>
+            {this.state.charpCode}
+
+    </SyntaxHighlighter>
+            </TabPanel>
+            <TabPanel value={this.state.codeTab} index={2}>
+
+            <SyntaxHighlighter language="javascript" style={atomDark}>
+            {this.state.xhrCode}
+
+    </SyntaxHighlighter>
+            </TabPanel>
+            <TabPanel value={this.state.codeTab} index={3}>
+
+            <SyntaxHighlighter language="javascript" style={atomDark}>
+            {this.state.code}
+
+    </SyntaxHighlighter>
+
+            
+</TabPanel>
+
+
+
+
+
+              
             </TabPanel>
 
             <Card></Card>
